@@ -8,7 +8,7 @@ const { join, joinCheck, login, auth } = require('../controller/users');
 router.post('/join', join);
 
 // 회원가입 이메일 중복검사
-router.post('/join/check', join);
+router.post('/join/check', joinCheck);
 
 // 로그인
 router.post('/login', login);
