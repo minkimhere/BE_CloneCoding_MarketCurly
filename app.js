@@ -12,7 +12,15 @@ app.use(cors()); // 빈칸으로 두면 모든 요청 허용
 
 //Request 로그 남기는 미들웨어
 const requestMiddleware = (req, res, next) => {
-  console.log("Request URL:", req.originalUrl, " - ", new Date().toLocaleString('ko-KR'));
+  console.log(
+    "Request URL:",
+    req.originalUrl,
+    " - ",
+    new Date(+new Date() + 3240 * 10000)
+      .toISOString()
+      .replace("T", " ")
+      .replace(/\..*/, "")
+  );
   next();
 };
 
