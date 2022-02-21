@@ -31,10 +31,12 @@ app.use(express.urlencoded({ extended: false })); // form body parser
 const usersRouter = require('./routes/users');
 const pagesRouter = require('./routes/pages');
 const cartsRouter = require('./routes/carts');
+const addressesRouter = require('./routes/addresses');
 
 app.use('/user', [usersRouter]);
 app.use('/page', [pagesRouter]);
 app.use('/cart', [cartsRouter]);
+app.use('/addresses', [addressesRouter]);
 
 app.listen(port, () => {
   console.log(port, '포트로 서버가 켜졌습니다.');
