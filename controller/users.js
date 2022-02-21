@@ -31,6 +31,7 @@ const joinCheck = async (req, res) => {
 // 회원가입 validate할 스키마
 const joinSchema = Joi.object({
   email: Joi.string().required(),
+  name: Joi.string(). required(),
   password: Joi.string().required(),
   confirmpassword: Joi.string().required(),
 });
@@ -38,7 +39,7 @@ const joinSchema = Joi.object({
 // 회원가입
 const join = async (req, res) => {
   try {
-    const { email, password, confirmpassword } = await joinSchema.validateAsync(
+    const { email, name, password, confirmpassword } = await joinSchema.validateAsync(
       // Joi 유효성 검사
       req.body
     );
@@ -56,7 +57,7 @@ const join = async (req, res) => {
     }
 
     const encodedPassword = bcrypt.hashSync(password, 10);
-    await Users.create({ email, password: encodedPassword });
+    await Users.create({ email, name, password: encodedPassword });
     res.json({ ok: true, message: "회원가입이 성공적으로 완료되었습니다." });
   } catch (error) {
     res.status(400).json({
