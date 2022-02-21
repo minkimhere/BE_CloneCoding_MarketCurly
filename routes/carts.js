@@ -2,18 +2,18 @@ const express = require("express");
 const router = express.Router();
 const authMiddleware = require("../middlewares/auth-middleware");
 
-// const { postCart, getCart, putCart, deleteCart } = require("../controller/pages");
+const controller = require('../controller/carts');
 
 // 장바구니 추가
-// router.post("/main/new", postCart);
+router.post("/:postId", authMiddleware, controller.postCart);
 
 // 장바구니 조회
-// router.post("/sub/best", getCart);
+router.get("/", authMiddleware, controller.getCart);
 
 // 장바구니 수정
-// router.post("/sub/discount", putCart);
+router.put("/:postId", authMiddleware, controller.putCart);
 
 // 장바구니 삭제
-// router.post("/sub/discount", deleteCart);
+router.delete("/:postId", authMiddleware, controller.deleteCart);
 
 module.exports = router;
