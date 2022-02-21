@@ -1,24 +1,28 @@
+require('dotenv').config(); // 환경변수
+
 const express = require('express');
-const connect = require('./models');
-const cors = require('cors');
 const app = express();
-require('dotenv').config();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000; 
+
+const connect = require('./models');
 connect(); // 스키마 연결
+
+const cors = require('cors');
+app.use(cors()); // 빈칸으로 두면 모든 요청 허용
+
+//Request 로그 남기는 미들웨어
+const requestMiddleware = (req, res, next) => {
+  console.log("Request URL:", req.originalUrl, " - ", new Date().toLocaleString('ko-KR'));
+  next();
+};
+
+app.use(requestMiddleware); // request log
+app.use(express.json()); // body parser
+app.use(express.urlencoded({ extended: false })); // form body parser
 
 const usersRouter = require('./routes/users');
 const pagesRouter = require('./routes/pages');
 const cartsRouter = require('./routes/carts');
-
-const requestMiddleware = (req, res, next) => {
-  console.log('Request URL:', req.originalUrl, ' - ', new Date());
-  next();
-};
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cors()); // 빈칸으로 두면 모든 요청 허용
-app.use(requestMiddleware);
 
 app.use('/user', [usersRouter]);
 app.use('/page', [pagesRouter]);
