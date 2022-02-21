@@ -25,7 +25,8 @@
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.2",
-    "mongoose-sequence": "^5.3.1"
+    "mongoose-sequence": "^5.3.1",
+    "selenium-webdriver": "^4.1.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

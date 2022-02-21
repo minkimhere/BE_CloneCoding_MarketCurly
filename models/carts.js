@@ -6,7 +6,7 @@ const cartsSchema = new mongoose.Schema({
   postId: String,
   title: String,
   price: String,
-  quantity: String,
+  quantity: Number,
   img: String,
 });
 

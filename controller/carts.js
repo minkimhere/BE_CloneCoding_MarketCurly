@@ -5,14 +5,10 @@ const postCart = async (req, res) => {
     const { postId } = req.params;
     const { title, price, img, quantity } = req.body;
 
-    // const exitCart = await Cart.findOne({ userId, postId });
-    // if(exitCart){
-    //   await Cart.updateOne({ userId, postId }, { $inc: { quantity: +1 }});
-    //   res.status(200).json({
-    //     ok: "false",
-    //     msg: '장바구니에 상품을 담았습니다. 이미 담으신 상품이 있어 추가됩니다.'
-    //   })
-    // }
+    const exitCart = await Cart.findOne({ userId, postId });
+    if(exitCart){
+      await Cart.updateOne({ userId, postId }, { $inc: { quantity: +1 }});
+    }
     try{
       await Cart.create({
         userId,
@@ -31,7 +27,7 @@ const postCart = async (req, res) => {
 
 const getCart = async (req, res) => {
   const userId = res.locals.user.userId;
- 
+  console.log(userId, '유저, 포스트 아이디 확인용');
   try{
     const getCarts = await Cart.find({ userId });
       return res.status(200).json({ 
