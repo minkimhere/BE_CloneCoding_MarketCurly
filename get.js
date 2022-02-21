@@ -9,7 +9,7 @@ const Posts = require('./models/pages')
 const run = async () => { 
   // 1. chromedriver 경로 설정 
   // chromedriver가 있는 경로를 입력 
-  const service = new chrome.ServiceBuilder().build(); 
+  const service = new chrome.ServiceBuilder('./chromedriver').build(); 
   chrome.setDefaultService(service); 
   
   // 2. chrome 브라우저 빌드 
