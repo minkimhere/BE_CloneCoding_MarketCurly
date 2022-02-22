@@ -3,6 +3,7 @@ const UsersSchema = new mongoose.Schema({
   email: String,
   password: String,
   name: String,
+  address : String,
 });
 
 // Userschema get 요청으로 사용할 때 _id 값을 string으로 형변환 해주고 가상속성으로 사용하게 해줌.
