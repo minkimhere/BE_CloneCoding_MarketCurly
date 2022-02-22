@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// EC2 서버용
 const connect = () => {
   mongoose //
     .connect(process.env.MONGO_URL)
