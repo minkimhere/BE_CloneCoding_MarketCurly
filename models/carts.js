@@ -4,6 +4,7 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const cartsSchema = new mongoose.Schema({
   postId: String,
+  userEmail: String,
   title: String,
   price: String,
   quantity: Number,
