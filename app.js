@@ -36,7 +36,7 @@ const addressesRouter = require('./routes/addresses');
 app.use('/user', [usersRouter]);
 app.use('/page', [pagesRouter]);
 app.use('/cart', [cartsRouter]);
-app.use('/addresses', [addressesRouter]);
+app.use('/address', [addressesRouter]);
 
 app.listen(port, () => {
   console.log(port, '포트로 서버가 켜졌습니다.');

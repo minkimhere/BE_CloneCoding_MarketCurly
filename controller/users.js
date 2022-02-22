@@ -43,6 +43,7 @@ const join = async (req, res) => {
       // Joi 유효성 검사
       req.body
     );
+    const address = "";
     const existEmail = await Users.findOne({ email }); // User document 안에서 email 있는지 찾음.
 
     if (password !== confirmpassword) {
@@ -57,7 +58,7 @@ const join = async (req, res) => {
     }
 
     const encodedPassword = bcrypt.hashSync(password, 10);
-    await Users.create({ email, name, password: encodedPassword });
+    await Users.create({ email, name, password: encodedPassword, address });
     res.json({ ok: true, message: "회원가입이 성공적으로 완료되었습니다." });
   } catch (error) {
     res.status(400).json({
