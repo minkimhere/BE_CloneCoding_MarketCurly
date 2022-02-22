@@ -1,24 +1,29 @@
 const Cart = require('../models/carts');
+const Posts = require('../models/pages');
 
 const postCart = async (req, res) => {
-    const userId = res.locals.user.userId;
-    const { postId } = req.params;
-    const { title, price, img, quantity } = req.body;
+    const userEmail = res.locals.user.email;
+    // console.log(userEmail)
+    const { postId, quantity } = req.body;
+    const thePost = await Posts.findOne({postId});
 
-    const exitCart = await Cart.findOne({ userId, postId });
+    const exitCart = await Cart.findOne({ userId: userEmail, postId });
+    console.log(exitCart)
     if(exitCart){
-      await Cart.updateOne({ userId, postId }, { $inc: { quantity: +1 }});
-    }
+      await Cart.updateOne({ userId : userEmail, postId }, { $inc: { quantity:+quantity }});
+      return res.status(200).json({ ok: 'true22' })
+    } 
     try{
       await Cart.create({
-        userId,
+        userEmail,
         postId,
-        title,
-        price,
-        img,
+        title: thePost.title,
+        price: thePost.price,
+        img : thePost.img,
         quantity,
       });
-      const data = { userId, postId, title, price, img, quantity};
+      const data = { userId : userEmail, postId, title: thePost.title, price: thePost.price, img : thePost.img, quantity};
+      // console.log(data)
       res.status(200).json({ ok: 'true', data });
     } catch (error) {
       res.status(400).json({ ok: 'false' });
