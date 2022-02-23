@@ -3,6 +3,7 @@ const Posts = require("../models/pages");
 
 const postCart = async (req, res) => {
   const userEmail = res.locals.user.email;
+  console.log(res.locals.user);
   const { postId, quantity } = req.body;
   const thePost = await Posts.findOne({ postId });
   const exitCart = await Cart.findOne({ userEmail, postId });
@@ -10,7 +11,7 @@ const postCart = async (req, res) => {
   if (exitCart.userEmail === userEmail) {
     await Cart.updateOne(
       { userEmail, postId },
-      { $inc: { quantity: +quantity } }
+      { $inc: { quantity: +quantity }}
     );
     return res.status(200).json({ ok: "true" });
   }
@@ -83,7 +84,7 @@ const putCartInc = async (req, res) => {
     const user = await Cart.findOne({ postId }); // 디비에 있는 email
 
     if (user.userEmail === loginUserEmail) { // 로그인 된 유저일 경우만
-      await Cart.updateOne({ postId }, { $inc: { quantity: +1 } });
+      await Cart.updateOne({ userEmail, postId }, { $inc: { quantity: +1 } });
       res.json({ ok: true, message: "장바구니 수량 증가 +1 완료" });
     } else {
       res.json({ ok: false, message: "장바구니 수량 증가 +1 실패" });
