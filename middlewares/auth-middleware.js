@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const Users = require('../schemas/users');
+const Users = require('../models/users');
 
 // 인증
 module.exports = (req, res, next) => {
