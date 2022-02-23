@@ -3,13 +3,15 @@ const Posts = require("../models/pages");
 
 const postCart = async (req, res) => {
   const userEmail = res.locals.user.email;
+  console.log('1'+userEmail)
   const { postId, quantity } = req.body;
+  console.log('2'+postId, quantity)
   const thePost = await Posts.findOne({ postId });
   const exitCart = await Cart.findOne({ userEmail, postId });
-  console.log(exitCart);
-  if (exitCart.userId === userEmail) {
+  console.log('3'+exitCart);
+  if (exitCart.userEmail === userEmail) {
     await Cart.updateOne(
-      { userId: userEmail, postId },
+      { userEmail, postId },
       { $inc: { quantity: +quantity } }
     );
     return res.status(200).json({ ok: "true" });
@@ -24,7 +26,7 @@ const postCart = async (req, res) => {
       quantity,
     });
     const data = {
-      userId: userEmail,
+      userEmail,
       postId,
       title: thePost.title,
       price: thePost.price,
