@@ -7,18 +7,13 @@ const postCart = async (req, res) => {
   const thePost = await Posts.findOne({ postId });
   const exitCart = await Cart.findOne({ userEmail, postId });
   console.log(exitCart);
-  try {
-    if (exitCart.userEmail === userEmail) {
-      await Cart.updateOne(
-        { userEmail, postId },
-        { $inc: { quantity: +quantity } }
-      );
-      return res.status(200).json({ ok: "true" });
-    }
-  } catch(error) {
-    console.error(`${error}`)
+  if (exitCart.userEmail === userEmail) {
+    await Cart.updateOne(
+      { userEmail, postId },
+      { $inc: { quantity: +quantity } }
+    );
+    return res.status(200).json({ ok: "true" });
   }
-
   try {
     await Cart.create({
       userEmail,
@@ -86,9 +81,6 @@ const putCartInc = async (req, res) => {
     const { postId } = req.params;
     const loginUserEmail = res.locals.user.email; // 로그인 정보에 담아놓은 email
     const user = await Cart.findOne({ postId }); // 디비에 있는 email
-
-    console.log(user.userEmail);
-    console.log(loginUserEmail)
 
     if (user.userEmail === loginUserEmail) { // 로그인 된 유저일 경우만
       await Cart.updateOne({ postId }, { $inc: { quantity: +1 } });
