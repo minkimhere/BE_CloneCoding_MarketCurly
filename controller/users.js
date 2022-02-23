@@ -14,6 +14,12 @@ const joinCheck = async (req, res) => {
     const { email } = await emailCheckSchema.validateAsync(req.body); // Joi 유효성 검사
     const existEmail = await Users.findOne({ email }); // User document 안에서 email 있는지 찾음.
 
+    const regExp =
+      /^[a-zA-Z0-9]([-_\.]?[a-zA-Z0-9])*@[a-zA-Z0-9]([-_\.]?[a-zA-Z0-9])*\.[a-zA-Z]{2,3}$/;
+    if (!regExp.test(email)) {
+      return res.json({ ok: false, message: "이메일 형식으로 입력해주세요." });
+    }
+
     if (!existEmail) {
       return res.json({ ok: true, message: "사용가능한 이메일입니다." });
     }
@@ -31,7 +37,7 @@ const joinCheck = async (req, res) => {
 // 회원가입 validate할 스키마
 const joinSchema = Joi.object({
   email: Joi.string().required(),
-  name: Joi.string(). required(),
+  name: Joi.string().required(),
   password: Joi.string().required(),
   confirmpassword: Joi.string().required(),
 });
@@ -39,10 +45,11 @@ const joinSchema = Joi.object({
 // 회원가입
 const join = async (req, res) => {
   try {
-    const { email, name, password, confirmpassword } = await joinSchema.validateAsync(
-      // Joi 유효성 검사
-      req.body
-    );
+    const { email, name, password, confirmpassword } =
+      await joinSchema.validateAsync(
+        // Joi 유효성 검사
+        req.body
+      );
     const address = "";
     const existEmail = await Users.findOne({ email }); // User document 안에서 email 있는지 찾음.
 
@@ -51,6 +58,12 @@ const join = async (req, res) => {
         ok: false,
         message: "비밀번호가 비민번호 확인란과 일치하지 않습니다.",
       });
+    }
+
+    const regExp =
+      /^[a-zA-Z0-9]([-_\.]?[a-zA-Z0-9])*@[a-zA-Z0-9]([-_\.]?[a-zA-Z0-9])*\.[a-zA-Z]{2,3}$/;
+    if (!regExp.test(email)) {
+      return res.json({ ok: false, message: "이메일 중복체크를 해주세요." });
     }
 
     if (existEmail) {
