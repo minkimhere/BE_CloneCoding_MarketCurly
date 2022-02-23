@@ -3,9 +3,11 @@ const Posts = require("../models/pages");
 
 const postCart = async (req, res) => {
   const userEmail = res.locals.user.email;
+  console.log('1'+userEmail)
   const { postId, quantity } = req.body;
+  console.log('2'+postId, quantity)
   const thePost = await Posts.findOne({ postId });
-  const exitCart = await Cart.findOne({ userEmail, postId });
+  const exitCart = await Cart.findOne({ userId: userEmail, postId });
   console.log(exitCart);
   try {
     if (exitCart.userEmail === userEmail) {
