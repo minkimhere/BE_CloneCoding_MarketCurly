@@ -3,22 +3,14 @@ const Posts = require("../models/pages");
 
 const postCart = async (req, res) => {
   const userEmail = res.locals.user.email;
-  console.log('1'+userEmail)
-  const { postId, quantity } = req.body;
-  console.log('2'+postId, quantity)
+  const { quantity } = req.body;
+  const { postId } = req.params;
   const thePost = await Posts.findOne({ postId });
-  const exitCart = await Cart.findOne({ userId: userEmail, postId });
-  console.log(exitCart);
-  try {
-    if (exitCart.userEmail === userEmail) {
-      await Cart.updateOne(
-        { userEmail, postId },
-        { $inc: { quantity: +quantity } }
-      );
-      return res.status(200).json({ ok: "true" });
-    }
-  } catch(error) {
-    console.error(`${error}`)
+  const exitCart = await Cart.findOne({ userEmail, postId });
+ 
+  if (exitCart) {
+    await Cart.updateOne({ userEmail, postId}, {$inc : {quantity:+quantity}})
+    return res.status(200).json({ ok: "기존에 있는거여서 추가 했슴당" });
   }
 
   try {
@@ -87,13 +79,13 @@ const putCartInc = async (req, res) => {
   try {
     const { postId } = req.params;
     const loginUserEmail = res.locals.user.email; // 로그인 정보에 담아놓은 email
-    const user = await Cart.findOne({ postId }); // 디비에 있는 email
+    const user = await Cart.findOne({ postId, userEmail:loginUserEmail }); // 디비에 있는 email
 
     console.log(user.userEmail);
     console.log(loginUserEmail)
 
     if (user.userEmail === loginUserEmail) { // 로그인 된 유저일 경우만
-      await Cart.updateOne({ postId }, { $inc: { quantity: +1 } });
+      await Cart.updateOne({ postId, userEmail:loginUserEmail }, { $inc: { quantity: +1 } });
       res.json({ ok: true, message: "장바구니 수량 증가 +1 완료" });
     } else {
       res.json({ ok: false, message: "장바구니 수량 증가 +1 실패" });
@@ -109,7 +101,7 @@ const putCartDec = async (req, res) => {
   try {
     const { postId } = req.params;
     const loginUserEmail = res.locals.user.email; // 로그인 정보에 담아놓은 email
-    const user = await Cart.findOne({ postId }); // 디비에 있는 email
+    const user = await Cart.findOne({ postId, userEmail:loginUserEmail }); // 디비에 있는 email
     const quantity = user.quantity; // 장바구니 수량
 
     // 1 이하는 감소 불가
@@ -121,7 +113,7 @@ const putCartDec = async (req, res) => {
     }
 
     if (user.userEmail === loginUserEmail) { // 로그인 된 유저일 경우만
-      await Cart.updateOne({ postId }, { $inc: { quantity: -1 } });
+      await Cart.updateOne({ postId, userEmail:loginUserEmail }, { $inc: { quantity: -1 } });
       res.json({ ok: true, message: "장바구니 수량 감소 -1 성공" });
     } else {
       res.json({ ok: false, message: "장바구니 수량 감소 -1 실패" });
