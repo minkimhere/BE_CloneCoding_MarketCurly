@@ -7,12 +7,16 @@ const postCart = async (req, res) => {
   const thePost = await Posts.findOne({ postId });
   const exitCart = await Cart.findOne({ userId: userEmail, postId });
   console.log(exitCart);
-  if (exitCart) {
-    await Cart.updateOne(
-      { userId: userEmail, postId },
-      { $inc: { quantity: +quantity } }
-    );
-    return res.status(200).json({ ok: "true" });
+  try {
+    if (exitCart.userEmail === userEmail) {
+      await Cart.updateOne(
+        { userEmail, postId },
+        { $inc: { quantity: +quantity } }
+      );
+      return res.status(200).json({ ok: "true" });
+    }
+  } catch(error) {
+    console.error(`${error}`)
   }
   try {
     await Cart.create({
